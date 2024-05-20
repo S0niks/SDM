@@ -1,7 +1,7 @@
 class Pet:
 
     def __init__(self, pet_id, kind, name, animal_species, gender, size):
-        self.pet_id = pet_id
+        self.id = pet_id
         self.kind = kind
         self.name = name
         self.animal_species = animal_species
@@ -9,7 +9,7 @@ class Pet:
         self.size = size
 
     def __eq__(self, other):
-        return self.pet_id == other.pet_id
+        return self.id == other.id
     def __str__(self):
         return f"""Животное: {self.kind}, 
             Порода - {self.animal_species},
