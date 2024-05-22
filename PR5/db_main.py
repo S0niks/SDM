@@ -4,7 +4,6 @@ from db_setup import Base, AnimalShelter, Volunteer, Aviary, Pet
 
 DATABASE_URL = "sqlite:///animal_shelter.db"
 
-# Setup the database and session
 engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
