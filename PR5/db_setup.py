@@ -50,7 +50,7 @@ class AnimalShelter(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
-    # Establish relationships
+    # установка отношений
     volunteers = relationship('Volunteer', back_populates='animal_shelter')
     aviaries = relationship('Aviary', back_populates='animal_shelter')
 
@@ -72,10 +72,6 @@ def setup_database():
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    # Optionally add some initial data here
-    # shelter = AnimalShelter(name="Happy Paws Shelter")
-    # session.add(shelter)
-    # session.commit()
 
     print("Database setup complete.")
 
