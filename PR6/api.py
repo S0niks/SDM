@@ -4,9 +4,14 @@ from sqlalchemy.orm import Session
 from unit_of_work import UnitOfWork
 from Repositories import VolunteerRepository, AviaryRepository, PetRepository, AnimalShelterRepository
 from db_setup import Volunteer, Aviary, Pet, AnimalShelter
+import json
+
+def write_to_json(data, file_path):
+    with open(file_path, 'a') as file:
+        json.dump(data, file)
+        file.write('\n')
 
 class VolunteerCreate(BaseModel):
-    id: int
     fio: str
     phone_number: str
 
@@ -62,6 +67,11 @@ def create_volunteer(volunteer: VolunteerCreate, db: Session = Depends(get_db)):
     db.add(db_volunteer)
     db.commit()
     db.refresh(db_volunteer)
+
+    # Запись действия в JSON файл
+    data = {"action": "create_volunteer", "volunteer_id": db_volunteer.id, "volunteer_data": volunteer.dict()}
+    write_to_json(data, "actions.json")
+
     return db_volunteer
 
 @app.post("/aviaries/", response_model=AviaryResponse)
@@ -70,6 +80,11 @@ def create_aviary(aviary: AviaryCreate, db: Session = Depends(get_db)):
     db.add(db_aviary)
     db.commit()
     db.refresh(db_aviary)
+
+    # Запись действия в JSON файл
+    data = {"action": "create_aviary", "aviary_id": db_aviary.id, "aviary_data": aviary.dict()}
+    write_to_json(data, "actions.json")
+
     return db_aviary
 
 @app.post("/pets/", response_model=PetResponse)
@@ -78,6 +93,11 @@ def create_pet(pet: PetCreate, db: Session = Depends(get_db)):
     db.add(db_pet)
     db.commit()
     db.refresh(db_pet)
+
+    # Запись действия в JSON файл
+    data = {"action": "create_pet", "pet_id": db_pet.id, "pet_data": pet.dict()}
+    write_to_json(data, "actions.json")
+
     return db_pet
 
 @app.post("/shelters/", response_model=AnimalShelterResponse)
@@ -86,6 +106,12 @@ def create_animal_shelter(shelter: AnimalShelterCreate, db: Session = Depends(ge
     db.add(db_shelter)
     db.commit()
     db.refresh(db_shelter)
+
+    # Запись действия в JSON файл
+    data = {"action": "create_animal_shelter", "shelter_id": db_shelter.id, "shelter_data": shelter.dict()}
+    write_to_json(data, "actions.json")
+
+    return db_shelter
 
 
 
@@ -116,6 +142,7 @@ def get_animal_shelter(shelter_id: int, db: Session = Depends(get_db)):
     if shelter is None:
         raise HTTPException(status_code=404, detail="Animal shelter not found")
     return shelter
+
 
 
 if __name__ == '__main__':

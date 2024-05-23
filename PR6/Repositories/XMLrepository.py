@@ -59,3 +59,4 @@ class XMLRepository(ABCRepository):
 
     def find(self, **kwargs):
         pass
+
